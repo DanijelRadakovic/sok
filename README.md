@@ -1,2 +1,1 @@
-# sok
-SOK - SIIT
+# Softverski obrasci i komponente
