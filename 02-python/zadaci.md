@@ -1,4 +1,4 @@
-# Python zadaci za vežbanje
+# Python - zadaci za vežbanje
 
 ## 1. Zadaci funkcije
 
