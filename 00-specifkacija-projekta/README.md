@@ -14,7 +14,7 @@ Aplikacija treba da se sastoji od sledećih komponenti:
     - **Data source plugin**: parsira određeni skup podataka i pri tome konstruiše graf (model podataka).
     - **Visualizer plugin**:  radi vizualiaciju modela podataka uz oslonac na `Django template`-a i `force-layout D3.js`
       biblioteku.
-- **ABI**: `Python` biblioteka koja sadrži apstrakcije koji modeluju API (i sam model podataka) za`Data source`
+- **API**: `Python` biblioteka koja sadrži apstrakcije koji modeluju API (i sam model podataka) za`Data source`
   i `Visualizer` *plugin*-ova. Ova biblioteka se koristi kao *dependency* od strane platforme (koja koristi API) i
   svih *plugin*-ova (koji implemntiraju API). Takođe, kod je neophodno dokumentovati kako bi se olakšalo korišćenje same
   biblioteke. Ideja ove biblioteke je da olakša komunikaicju između *plugin*-ova i platforme i preporučuje se korišćenje
@@ -26,12 +26,12 @@ prelazak sa `Django`-a na `FastAPI`.
 
 Organizacija projekta treba da obuhvata sledeće foldere:
 
-- `abi`,
-- `platform` (ima dependency na `abi`),
-- `data_source_plugin-1` (ima dependency na `abi`),
-- `data_source_plugin-2` (ima dependency na `abi`),
-- `simple_visualizer` (ima dependency na `abi`),
-- `block_visualizer` (ima dependency na `abi`),
+- `api`,
+- `platform` (ima dependency na `api`),
+- `data_source_plugin-1` (ima dependency na `api`),
+- `data_source_plugin-2` (ima dependency na `api`),
+- `simple_visualizer` (ima dependency na `api`),
+- `block_visualizer` (ima dependency na `api`),
 - `graph_explorer` (glavni projekat koji ima *dependency*-ije na platformu i sve *plugin*-e)
 
 **Napomena**: Dodeliti smislene nazive `plugin`-ova.
@@ -450,7 +450,8 @@ nema smisla. Primena obazaca u projektu će se diskutovati na odbrani projekta.
 
 ### 3.3. Git
 
-Neophodno je na nivou tima kreirati `GitLab` repozitorijum (ostali `git` provider-i nisu dozvoljeni za korišćenje).
+Neophodno je na nivou tima kreirati `GitLab` ili `GitHub` repozitorijum (ostali `git` provider-i nisu dozvoljeni za
+korišćenje).
 
 Git repozitorijum voditi po
 preporučenom [GitFlow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) modelu. Potrebno je
