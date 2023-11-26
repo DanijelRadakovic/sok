@@ -1,6 +1,6 @@
 # Razvoj komponenti u Python-u
 
-> **Napomena**: Video materijali za ove vežbe su
+> **Napomena**: Video-materijali za ove vežbe su
 > dostupni [ovde](https://drive.google.com/file/d/1534kHjcJ4pg_jaf9YYEjxSdoDzCd0Uqg/view?usp=sharing).
 
 Ove vežbe su namenje za bolje upoznavanje sa razvojom komponenti u programskom jeziku Python

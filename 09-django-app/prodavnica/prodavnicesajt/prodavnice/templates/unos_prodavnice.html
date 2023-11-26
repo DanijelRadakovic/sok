@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 >Unesite vrednosti za prodavnicu:</h1>
+    <form method="post" action="{% url 'unos_prodavnice' %}">
+        {% csrf_token %}
+        <div class="label">PIB:</div>
+        <div class="unos"><input type="text" name="pib" value="{{ pib }}" /></div>
+        {% if greska_pib %}
+        <div class="greska" >{{greska_pib}}</div>
+        {% endif %}
+        <div class="label">Naziv:</div>
+        <div class="unos"><input type="text" name="naziv" value="{{ naziv }}"></div>
+        {% if greska_naziv %}
+        <div class="greska" >{{greska_naziv}}</div>
+        {% endif %}
+        <div class="label">Adresa:</div>
+        <div class="unos"><input type="text" name="adresa" value="{{ adresa }}"></div>
+        {% if greska_adresa %}
+        <div class="greska" >{{greska_adresa}}</div>
+        {% endif %}
+        <div class="label">Broj telefona:</div>
+        <div class="unos"><input type="text" name="broj_telefona" value="{{ broj_telefona }}"></div>
+        {% if greska_broj_telefona %}
+        <div class="greska" >{{greska_broj_telefona}}</div>
+        {% endif %}
+        {% if stari_id %}
+        <input type="hidden" name="stari_id" value="{{ stari_id }}"/>
+        {% endif %}
+        <div  class="dugme"><input type="submit" value="unesi"/></div>
+    </form>
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block content %}
+{% if greska_artikli or greska_lista_kategorije %}
+<h1 >Nije moguc unos artikla</h1>
+{% if greska_artikli %}
+<p class="greska" >{{greska_artikli}}</p>
+{% endif %}
+{% if greska_lista_kategorije %}
+<p class="greska" >{{greska_lista_kategorije}}</p>
+{% endif %}
+{% else %}
+<h1 >Unesite vrednosti za artikal:</h1>
+    <form method="post" action="{% url 'unos_artikla' %}">
+        {% csrf_token %}
+        <table>
+        <tr><td>Oznaka:</td>
+            <td>
+                <input type="text" name="oznaka" value="{{ oznaka }}" /></td>
+            <td>
+                {% if greska_oznaka %}
+                <div class="greska" >{{greska_oznaka}}</div>
+                {% endif %}
+            </td>
+        </tr>
+        <tr><td>Naziv:</td>
+            <td>
+               <input type="text" name="naziv" value="{{ naziv }}"></td>
+            <td>
+                {% if greska_naziv %}
+                <div class="greska" >{{greska_naziv}}</div>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>Opis:</td>
+            <td>
+               <input type="text" name="opis" value="{{ opis }}">
+            </td>
+            <td>
+                {% if greska_opis %}
+                <div class="greska" >{{greska_opis}}</div>
+                {% endif %}
+            </td>
+        </tr>
+        <tr><td>Cena:</td>
+            <td>
+               <input type="text" name="cena" value="{{ cena }}">
+            </td>
+            <td>
+                {% if greska_cena %}
+                <div class="greska" >{{greska_cena}}</div>
+                {% endif %}
+            </td>
+        </tr>
+        <tr><td>Na akciji:</td>
+            <td>
+                <input type="checkbox" name="na_akciji" value="True"
+                       {% if na_akciji %}
+                             checked
+                       {% endif %}
+                />
+            </td>
+            <td>
+                {% if greska_na_akciji %}
+                <div class="greska" >{{greska_na_akciji}}</div>
+                {% endif %}
+            </td>
+        </tr>
+
+
+        <tr><td>Kategorije:</td>
+        <td>
+            <select multiple name="kategorije">
+                {% for k in lista_kategorija %}
+                    <option value="{{ k.id }}"
+                       {% if kategorije %}
+                           {% for k_i in kategorije %}
+                               {% if k_i.id == k.id %}
+                                    selected
+                               {% endif %}
+                            {% endfor %}
+                       {% endif %}
+                    >{{ k.naziv }}</option>
+                {% endfor %}
+            </select>
+        </td>
+        <td>
+            {% if greska_kategorije %}
+            <div class="greska" >{{greska_kategorije}}</div>
+            {% endif %}
+        </td>
+        </tr>
+        <tr><td>Prodavnica:</td>
+            <td>
+                <select name="prodavnica">
+                    {% for p in prodavnice %}
+                        <option value="{{ p.id }}"
+                           {% if prodavnica %}
+                               {% if p.id == prodavnica.id %}
+                                    selected
+                               {% endif %}
+                           {% endif %}
+                        >{{ p.naziv }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+            <td>
+                {% if greska_prodavnica %}
+                <div class="greska" >{{greska_prodavnica}}</div>
+                {% endif %}
+            </td>
+        </tr>
+        {% if stari_id %}
+        <tr><td>
+            <input type="hidden" name="stari_id" value="{{ stari_id }}"/>
+        </td></tr>
+
+        {% endif %}
+        <tr>
+            <td><input type="submit" value="Unesi"/></td>
+        </tr>
+        </table>
+    </form>
+{% endif %}
+{% endblock %}
