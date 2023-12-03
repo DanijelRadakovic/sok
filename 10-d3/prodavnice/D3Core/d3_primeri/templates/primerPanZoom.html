@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<svg width="500" height="500"></svg>
+<script type="text/javascript">
+    var g = d3.select("svg")
+        // call funkcija prima citavu selekciju i jednom se poziva nad njom.
+        // https://www.d3indepth.com/selections/#call
+
+        // Kao parametar call funkciji prosledjujemo zoom ponasanje (obuhvata i pan)
+        // koje se primenjuje nad citavom selekcijom.
+        // https://d3-wiki.readthedocs.io/zh_CN/master/Zoom-Behavior/#zoom
+        .call(d3.behavior.zoom().on("zoom", function () {
+            // Svaki put prilikom okidanja dogadjaja zoom-a (npr. rotacija tockica misa),
+            // poziva se ova funkcija koja radi translaciju i skaliranje na osnovu
+            // parametara koje cita iz dogadjaja
+            console.log("okida se dogadjaj")
+            g.attr("transform", "translate(" + d3.event.translate + ")" + " scale(" + d3.event.scale + ")")
+        }))
+        // dodajemo g tag u svg tag, koji se vraca kao selekcija i skaldisti u "svg" promenljivu
+        // https://bl.ocks.org/uicoded/dec8786d89184c88fa8f2c0abcdc152d
+        .append("g");
+    // u g tag dodajemo krug, kome podesavamo poziciju, poluprecnik i boju ispuna
+    g.append("circle")
+        .attr("cx", 100)
+        .attr("cy", 100)
+        .attr("r", 50)
+        .style("fill", "#B8DEE6");
+</script>
+{% endblock %}

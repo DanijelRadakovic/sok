@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block head_sadrzaj %}
+<script>
+    function circleClick(el){
+       alert("ID: "+el.id);
+    }
+</script>
+{% endblock %}
+{% block content %}
+<div>
+    <!-- platno je inicijalno prazno-->
+    <svg width="400" height="300">
+
+    </svg>
+</div>
+<div>
+    <!--Kreiranje dugmadi koja inicijalno ne rade nista-->
+    <button id="createBtn">Create</button>
+    <button id="enterBtn" >Enter</button>
+    <button id="exitBtn" >Exit</button>
+    <button id="enterBtnTransition" >Enter with transition</button>
+    <button id="exitBtnTransition" >Exit with transition</button>
+    <button id="removeAll" >Remove all</button>
+</div>
+<script>
+    var dataVar=[10,20,30];
+    // Dinamicki dodajemo funkciju koja obradjuje dogadjaj klika.
+    d3.select('#createBtn').on('click',
+       function(){
+          // Enter selekcija dodaje tri kruga, i za svaki
+          // koristi redom elemente niza dataVar prilikom
+          // odredjivanje pozicije centra kruga i njegovog poluprecnika.
+          // http://www.igordejanovic.net/courses/tech/d3.html#10
+          // Ovom selekcijom menjamo atribute krugova.
+          // Takodje registrujemo callback funckiju koja se poziva
+          // prilikom klika na krug.
+          d3.select('svg').selectAll('circle')
+              .data(dataVar).enter()
+              .append('circle')
+              .attr('cy',100)
+              .attr('class',function(d){return 'class'+d;})
+              .attr('id',function(d){return 'circle'+d;})
+              .attr('cx',function(d){return d*2;})
+              .attr('r',function(d,i){return d/10*(i+1);})
+              .attr('fill','green')
+              .on('click',function(){
+                    circleClick(this);
+              });
+       }
+    );
+    // Plitka kopija odredjene porcija (slice-a) dataVar niza.
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice
+    var dataVarEnter=dataVar.slice();
+    // dodavanje novih elemenata
+    dataVarEnter.push(40,50);
+    d3.select('#enterBtn').on('click',
+       function(){
+          // Ukoliko dodavanje nova dva kruga, ukoliko je prethodno dugme
+          // createBtn pritisnuto
+          d3.select('svg').selectAll('circle').data(dataVarEnter)
+              .enter()
+              .append('circle')
+              .attr('class',function(d){return 'class'+d;})
+              .attr('id',function(d){return 'circle'+d;})
+              .attr('cy',100)
+              .attr('cx',function(d){return d*2;})
+              .attr('r',function(d,i){return d/20*(i+1);})
+              .attr('fill','red')
+              .on('click',function(){circleClick(this);});
+       }
+    );
+
+    d3.select('#exitBtn').on('click',
+       function(){
+        // Napravice se presek (skupovna operacija) izmedju dataVarEnter i dataVar.
+        // Elementi koji ne pripadaju preseku bivaju izbaceni.
+        // Uklanjanje elemenata vrši se exit selekcijom.
+        d3.select('svg')
+              .selectAll('circle').data(dataVar)
+              .exit().remove();
+       }
+    );
+    // dodajemo dva elementa na dataVarEnter.
+    var dataVarEnterTransition=dataVarEnter.slice();
+    dataVarEnterTransition.push(70,80);
+    d3.select('#enterBtnTransition').on('click',
+       function(){
+          // Dodavanje novih krugova tranzicijom koja traje 1 sekundu.
+          // https://www.d3-graph-gallery.com/graph/interactivity_transition.html
+          d3.select('svg').selectAll('circle')
+              .data(dataVarEnterTransition)
+              .enter()
+              .append('circle')
+              .attr('class',function(d){return 'class'+d;})
+              .attr('id',function(d){return 'circle'+d;})
+              .attr('cy',100)
+              .attr('cx',function(d){return d*2;})
+              .attr('fill','blue')
+              .attr('r',0)
+              .transition().duration(1000)
+              .attr('r',function(d,i){return d/20*i;});
+       }
+    );
+
+    d3.select('#exitBtnTransition').on('click',
+       function(){
+          // Uklanjanje krugova sa tranzicijom koja traje 700ms.
+          // Tranzicija dovodi do postavljanje poluprecnika kruga na 0.
+          // Nakon toga bivaju uklonjeni svi krugovi ciji .data() podaci
+          // nisu u dataVar nizu.
+          d3.select('svg').selectAll('circle')
+              .data(dataVar)
+              .exit()
+              .transition()
+              .duration(700)
+              .attr('r',0)
+              .remove();
+       }
+    );
+
+    d3.select('#removeAll').on('click',
+       function(){
+          // Uklanjanje svih (preostalih) krugova na identican nacin.
+          d3.select('svg').selectAll('circle')
+              .transition()
+              .duration(700)
+              .attr('r',0)
+              .remove();
+       }
+    );
+
+</script>
+{% endblock %}

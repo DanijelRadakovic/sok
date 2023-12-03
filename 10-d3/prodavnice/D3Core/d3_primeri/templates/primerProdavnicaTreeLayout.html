@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block head_sadrzaj %}
+<style>
+
+/* Odnosi se na klasu koja predstavlja cvorove */
+.node {
+  cursor: pointer;
+  color: #3182bd;
+
+}
+
+/* Odnosi se na klasu koja predstavlja linkove */
+.link {
+  fill: none;
+  stroke: #9ecae1;
+  stroke-width: 1.5px;
+}
+
+</style>
+<script>
+    function nodeClick(el){
+       console.log(el)
+       alert("ID: "+el.name);
+    }
+</script>
+{% endblock %}
+{% block content %}
+<div>
+    <svg width="500" height="500">
+
+    </svg>
+</div>
+<script>
+    // Podatke koje treba vizualizovati prikazujemo u formi stabla.
+    // Svaki cvor treba da ima atribute:
+    // - name - identifikator cvora
+    // - naziv - naziv koji prikazujemo korisniku
+    // - children - lista dece cvorova (kako bi d3 znao da je u pitanju struktura stablo)
+    // Ovo je genericka struktura stabla, gde svaki cvor moze imano n dece.
+    // Uvodi se korenski cvor koji se odnosi na prodavnice.
+    var data={name:"Prodavnice",
+    naziv:"Prodavnice",
+    children:[
+        // Iteriramo po prodavnicama
+        {% for p in prodavnice %}
+           {name:"prodavnica_{{p.id}}",
+            naziv:"{{p.naziv}}"
+           // Ukoliko prodavnica ima artikle, onda ce to biti njena deca u stablu.
+           {% if p.artikli.all %}
+           ,children:[
+              // Iteracija po artiklima
+              {% for a in p.artikli.all %}
+                  {name:"artikal_{{a.id}}",
+                  naziv:"{{a.naziv}}"
+                  // Artikal moze pripadati nekoj kategoriji.
+                  {% if a.kategorije.all %}
+                    ,children:[
+                            {% for k in a.kategorije.all %}
+                               {name:"kategorija_{{k.id}}",size:"20",
+                                naziv:"{{k.naziv}}"},
+                            {% endfor %}
+                            ]},
+
+                  {% endif %}
+
+              {% endfor %}
+            ]
+            {% endif %}
+            }
+            // Poslednji element nema zarez
+            {%if forloop.counter < prodavnice|length %}
+            ,
+            {% endif %}
+        {% endfor %}
+        ]
+    };
+
+
+    var svg=d3.select('svg');
+    // add the links
+    // Kreiramo tree layou (elemente prikazuju u obliku stabla)
+    // https://d3-wiki.readthedocs.io/zh_CN/master/Tree-Layout/#tree
+    var tree=d3.layout.tree().size([400,400]);
+    // cvorovi stabla (lista) koje dobijamo iz korenskog cvora "data"
+    // https://d3-wiki.readthedocs.io/zh_CN/master/Tree-Layout/#nodes
+    var nodes=tree.nodes(data);
+    // linkovi (lista) koji povezuju roditelj-dete (kreiraju se na osnovu
+    // nodes promenljive)
+    // https://d3-wiki.readthedocs.io/zh_CN/master/Tree-Layout/#links
+    var links=tree.links(nodes);
+
+    //Dodavanje linkova (svg linije oznacene klasom '.link') enter selekcijom
+    var link = svg.selectAll('.link')
+        .data(links)
+        .enter().append('line')
+        .attr('class', 'link')
+        .attr('x1', function(d) { return d.source.y; })
+        .attr('y1', function(d) { return d.source.x; })
+        .attr('x2', function(d) { return d.target.y; })
+        .attr('y2', function(d) { return d.target.x; });
+
+    // Dodavanje cvorova (klasa .node)
+    // Svaki cvor je prestavljen g tagom koji grupise krug i tekst
+    // kojim se predstavlja cvor
+    var node = svg.selectAll('.node')
+        .data(nodes) //add
+        .enter().append('g')
+        .attr('class', 'node')
+        .attr('transform', function(d){return "translate("+d.y+","+d.x+")";})
+        .on('click', function (d) {
+            nodeClick(d)
+        });
+
+    // Krug koji se odnosi na cvor stabla
+    node.append('circle')
+        .attr('r', 10) //radius of circle
+        .attr('fill','blue');
+    // Tekst koji prikazujemo na cvoru iscitavamo iz naziva cvora
+    // (atribut koji je generisan prilikom definisanja "data" objekta).
+    node.append('text')
+        .text(function(d){return d.naziv;})
+
+
+</script>
+{% endblock %}

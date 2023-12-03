@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+{% block head_sadrzaj %}
+<style>
+
+.node {
+  cursor: pointer;
+  color: #3182bd;
+
+}
+
+.link {
+  fill: none;
+  stroke: #9ecae1;
+  stroke-width: 1.5px;
+}
+
+</style>
+<script>
+    function nodeClick(el){
+       alert("ID: "+el.id);
+    }
+</script>
+{% endblock %}
+{% block content %}
+<div>
+    <svg width="500" height="500">
+
+    </svg>
+</div>
+<script>
+    // Cvorovi grafa predstavljalu prodavnice i artikli.
+    var nodes={
+        // Prodavnice
+        {% for p in prodavnice %}
+            "prodavnica_{{p.id}}": {
+                name:"prodavnica_{{p.id}}",
+                naziv:"{{p.naziv}}",
+                kategorije:[]
+            },
+        {% endfor %}
+
+        // Artikli
+        {% for a in artikli %}
+            "artikal_{{a.id}}": {
+                name:"artikal_{{a.id}}",
+                naziv:"{{a.naziv}}",
+               {% if a.kategorije.all %}
+                   kategorije:[
+                       {% for k in a.kategorije.all %}
+                           {
+                               name:"kategorija_{{k.id}}",
+                               naziv:"{{k.naziv}}" },
+                       {% endfor %}
+                   ]
+               {% endif %}
+
+            },
+        {% endfor %}
+    };
+
+    // Ivice grafa povezuju prodavnicu sa artiklom.
+    // "source" atribut predstavlja string identifikator prodavnice
+    // "traget" atribut predstavlja string identifikator artikla
+    var links=[
+        {% for p in prodavnice %}
+           {% for a in p.artikli.all %}
+              {
+                  source:"prodavnica_{{p.id}}",
+                  target:"artikal_{{a.id}}"},
+           {% endfor %}
+        {% endfor %}
+    ];
+
+    // Za svaki link, "source" atribut se menja tako sto se vrsi zamena
+    // string identifikatora prodavnice stvarnim objektom koji se na tu
+    // prodavnicu odnosu (nodes[id_prodavnice_kao_kljuc]).
+    // Slicno i za "target" atribut.
+    links.forEach(function(link) {
+        link.source = nodes[link.source];
+        link.target = nodes[link.target];
+    });
+
+    // Force layout vrsi numericku simulaciju n-tela (n-cestica).
+    // https://d3-wiki.readthedocs.io/zh_CN/master/Force-Layout/
+    var force = d3.layout.force() // kreiranje force layout-a
+        .size([400, 400]) // raspoloziv prostor za iscrtavanje
+        .nodes(d3.values(nodes)) // dodavanje informacija o cvorovima grafa
+        .links(links) // dodavanje informacije o ivicama grafa
+        .on("tick", tick) // Dogadjaj tick okida se prilikokm svakog koraka simulacije.
+                          // Tada se poziva dolenavedena "tick" funckija koja koriguje pozicije
+                          // elemenata grafa.
+                          // Vise informacija mozete pronaci ovde:
+                          // https://d3-wiki.readthedocs.io/zh_CN/master/Force-Layout/#tick
+        .linkDistance(300) // duzina ivice grafa
+        .charge(-100) // koliko da se elementi odbijaju (pozitivna vrednost kaze koliko se elementi privlace)
+        .start(); //pokreni simulaciju
+
+    var svg=d3.select('svg');
+
+    // Stvarno iscrtavanje linkova koji su prikazani linijama.
+    var link = svg.selectAll('.link')
+        .data(links)
+        .enter().append('line')
+        .attr('class', 'link');
+
+    // Stvarno iscrtavanje cvorova reprezentovanih g tagom.
+    var node = svg.selectAll('.node')
+        .data(force.nodes()) //add
+        .enter().append('g')
+        .attr('class', 'node')
+        .attr('id', function(d){return d.name;})
+        .on('click',function(){
+           nodeClick(this);
+        });
+
+    // Sadrzaj svakog g taga iscrtavamo funkcijom slozenPrikaz.
+    d3.selectAll('.node').each(function(d){slozenPrikaz(d);});
+
+    function slozenPrikaz(d){
+      // Funkcija zaduzena za iscrtavanje cvora grafa
+      var duzina=150;
+      var brKategorija=d.kategorije.length;
+
+      var textSize=10;
+      var visina=(brKategorija==0)?textSize:brKategorija*textSize;
+      visina+=textSize;
+
+      // Iscrtavanje kvadrata.
+      d3.select("g#"+d.name)
+          .append('rect')
+          .attr('x',0)
+          .attr('y',0)
+          .attr('width',duzina)
+          .attr('height',visina)
+          .attr('fill','yellow');
+
+      // Prikaz naziva prodavnice ili artikla
+      d3.select("g#"+d.name)
+          .append('text')
+          .attr('x',duzina/2)
+          .attr('y',10)
+          .attr('text-anchor','middle')
+          .attr('font-size',textSize)
+          .attr('font-family','sans-serif')
+          .attr('fill','green')
+          .text(d.naziv);
+
+      // Prikaz razdelnika
+      d3.select("g#"+d.name)
+          .append('line')
+          .attr('x1',0)
+          .attr('y1',textSize)
+          .attr('x2',duzina)
+          .attr('y2',textSize)
+          .attr('stroke','gray')
+          .attr('stroke-width',2);
+
+        // Iteriranje po kategorijama.Ubacivanje teksta za kategorije
+        for(var i=0;i<brKategorija;i++)
+        {
+          // Prikaz naziva kategorije
+          d3.select("g#"+d.name)
+              .append('text')
+              .attr('x',0)
+              .attr('y',20+i*textSize)
+              .attr('text-anchor','start')
+              .attr('font-size',textSize)
+              .attr('font-family','sans-serif')
+              .attr('fill','green')
+              .text(d.kategorije[i].naziv);
+        }
+    }
+
+
+    function tick(e) {
+        // Korak simulacije koji koriguje pozicije cvorova i ivica grafa.
+
+        // translacija cvorova
+        node.attr("transform", function(d) {
+            return "translate(" + d.x + "," + d.y + ")";
+        })
+            // Omogucavamo interaktivno prevlacenje cvorova.
+            // Vise informacija na
+            // https://d3-wiki.readthedocs.io/zh_CN/master/Force-Layout/#drag
+            .call(force.drag);
+
+        // Korekcija pozicija ivica (linkova)
+        link.attr('x1', function(d) { return d.source.x; })
+            .attr('y1', function(d) { return d.source.y; })
+            .attr('x2', function(d) { return d.target.x; })
+            .attr('y2', function(d) { return d.target.y; });
+
+    }
+
+
+</script>
+{% endblock %}

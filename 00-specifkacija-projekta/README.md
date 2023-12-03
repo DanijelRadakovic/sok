@@ -8,7 +8,7 @@ omogućava da sa lakoćom menjate određene komponente vašeg softvera korišće
 
 Aplikacija treba da se sastoji od sledećih komponenti:
 
-- **Platforma**: `Django` aplikacija koja sadrži glavne funkcionalnosti nad manipulacijom grafa i sprovodi
+- **Platforma**: biblioteka koja sadrži glavne funkcionalnosti nad manipulacijom grafa i sprovodi
   komunikaciju između *plugin*-ova.
 - **Plugin**:
     - **Data source plugin**: parsira određeni skup podataka i pri tome konstruiše graf (model podataka).
@@ -19,10 +19,12 @@ Aplikacija treba da se sastoji od sledećih komponenti:
   svih *plugin*-ova (koji implemntiraju API). Takođe, kod je neophodno dokumentovati kako bi se olakšalo korišćenje same
   biblioteke. Ideja ove biblioteke je da olakša komunikaicju između *plugin*-ova i platforme i preporučuje se korišćenje
   `abs` i `typing` paketa. **Opciono**: verzionisanje biblioteke u skladu sa [Semantic Versioning](https://semver.org/).
+- **Web aplikacija**: `Django` aplikacija koja koristi platformu i plugine i omogućuje interakciju sa korisnikom pomoću 
+  *Web* aplikacije.
 
-Platformu i *plugin*-ove treba razviti kao komponente i instalirati ih u virtualno razvojno okruženje (`virtualenv`).
-Ovakvom arhitekturom pored *plugin*-ova omogućavamo da se i sama platforma može lako promeniti kao komponenta npr.
-prelazak sa `Django`-a na `FastAPI`.
+Platformu treba razviti kao biblioteku dok *plugin*-ove treba razviti kao komponente i instalirati ih u virtualno razvojno okruženje (`virtualenv`).
+Ovakvom arhitekturom pored *plugin*-ova omogućavamo da se i sama platforma može lako integrisati, na primer integrisati 
+u `Django` i u `FastAPI` framework.
 
 Organizacija projekta treba da obuhvata sledeće foldere:
 
@@ -32,7 +34,7 @@ Organizacija projekta treba da obuhvata sledeće foldere:
 - `data_source_plugin-2` (ima dependency na `api`),
 - `simple_visualizer` (ima dependency na `api`),
 - `block_visualizer` (ima dependency na `api`),
-- `graph_explorer` (glavni projekat koji ima *dependency*-ije na platformu i sve *plugin*-e)
+- `graph_explorer` (`Django` projekat koji ima *dependency*-ije na platformu i sve *plugin*-e)
 
 **Napomena**: Dodeliti smislene nazive `plugin`-ova.
 
@@ -192,6 +194,16 @@ dozvoljen i neki treći način uz prethodnu konsultaciju sa predmetnim asistento
 > druga opcija je da nakon obrade source *plugin*-a radite migraciju. Poslednja opcija je da ne
 > koristite `Django model`, nego da koristite `AppConfig` ili da koristite neku od *NoSQL* baza (`Neo4j`).
 
+#### 2.1.4 Workspace
+
+Platforma treba da bude sposobna da detektuje sve instalirane *Data Source plugin*-e i da ponudi izbor korisnku sa kog
+izvora podataka treba da se prikaže graf. U aplikaciji mogu da se učitaju više grafova sa različitih (ili istih) izvora
+podataka. Jedan izvor podataka zajedno sa aktivnim filterama i pretragama čine **workspace**. Korisniku treba omogućiti
+rad sa više *workspace*-ova.
+
+> **Opciono**: Implentirati trajno čuvanje *workspace*-a kako bi se korisniku omogućilo da nastavi rad iz prethodne
+> sesije.
+
 ### 2.2. Data source plugin
 
 Data source plugin treba da određeni izvor podataka parsira i formira graf (iz modela). Izvori podataka mogu biti bilo
@@ -199,6 +211,11 @@ koji podaci koji interno oslikavaja graf strukturu podataka (*JSON*, YAML, *XML*
 šema relacije baze podataka itd.). Za parsiranje podataka možete koristiti već gotove parsere (za *JSON*, *XML*, *CSV*,
 itd.) kao i ostale alate koji su vam neophodni. Podatke možete pronađi na internetu ili ih sami izgenerisati, ali je
 neophodno obezbediti **minimum 200 čvorova grafa** i poželjno je da graf bude što veći.
+
+*Plugin* ima definisane obavezne ulazne parametre. Broj ulaznih parametara zavisi od samog izvora podataka koji korisnik
+unosi prilikom odabira *plugin*-a. Na primer, za prikazivanje podataka sa *Twitter*-a neophodno je da korisnik definiše
+*API_URL* i *API_KEY* od *Twitter* naloga, dok za čitanje fajla sa lokalnog fajl sistema je neophodno definisati samo
+putanju do fajla.
 
 Prilokom parsiranja određenog formata izvora podataka (npr. *JSON*), *plugin* treba da obezbedit parsiranje
 **proizvoljnog** dokumenta tog formata i formiranje grafa na osnovu dokumenta. Formiranje grafa zavisi od konkretnog

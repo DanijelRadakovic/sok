@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<svg width="400" height="300">
+     <circle cx="20" cy="20" r="20" fill="green" />
+     <circle cx="70" cy="70" r="20" fill="purple" />
+   <g transform="translate(100,100)">
+     <circle cx="0" cy="0" r="20" fill="green" />
+     <circle cx="40" cy="40" r="20" fill="purple" />
+     <text x="40" y="50" text-anchor="start" font-size="10" font-family="sans-serif" fill="yellow">Krug</text>
+   </g>
+   <g transform="translate(170,170) scale(0.5,0.5)">
+     <rect x="0" y="0" height="30" width="30" fill="blue" />
+     <rect x="50" y="50" height="30" width="30" fill="red" />
+     <text x="50" y="60" text-anchor="start" font-size="10" font-family="sans-serif" fill="green">Kvadrat</text>
+   </g>
+</svg>
+{% endblock %}

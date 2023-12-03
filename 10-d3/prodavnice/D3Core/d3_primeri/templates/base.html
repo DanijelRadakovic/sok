@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--Ucitavanje d3.js biblioteke moguce je na ovaj nacin.-->
+    {% load static %}
+<!-- Download d3.v3.js from a website-->
+<!--    <script type="text/javascript" src="https://d3js.org/d3.v3.js"></script>-->
+<!-- Use local d3.v3.js -->
+    <script type="text/javascript" src="{% static 'd3.v3.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'style.css' %}"/>
+    <title>{{title}}</title>
+    {% block head_sadrzaj %}{% endblock %}
+</head>
+<body>
+<div class="page">
+      <div class="header">
+          <div>
+          <a href="{% url 'index' %}">D3 primeri index</a>
+          </div>
+          <div>
+              {% if plugini_ucitavanje %}
+                 {% for p in plugini_ucitavanje %}
+                    <!--Prikazivanje dostupnih plugina korisniku-->
+                    <a href="{% url 'ucitavanje_plugin' id=p.identifier %}">{{p.naziv}}</a>
+                 {% endfor %}
+              {% else %}
+                <h3>Nema prepoznatih plugina za ucitavanje</h3>
+              {% endif %}
+          </div>
+      </div>
+      <div class="left">
+          <ul>
+              <li>
+                  <a href="{% url 'index' %}">Home</a>
+              </li>
+              <li>
+                  <a href="{% url 'primer1'  %}">Primer1</a>
+              </li>
+              <li>
+                  <a href="{% url 'primer2'  %}">Primer2</a>
+              </li>
+              <li>
+                  <a href="{% url 'primer3' %}">Primer3</a>
+              </li>
+          </ul>
+          <ul>
+              <li>
+                  <a href="{% url 'primer4' %}">Primer4</a>
+              </li>
+          </ul>
+          <ul>
+              <li>
+                  <a href="{% url 'prodavnica_force_layout' %}">Prodavnica force layout</a>
+              </li>
+              <li>
+                  <a href="{% url 'prodavnica_tree_layout' %}">Prodavnica tree layout</a>
+              </li>
+          </ul>
+          <ul>
+              <li>
+                  <a href="{% url 'primerPanZoom' %}">Primer Pan Zoom</a>
+              </li>
+          </ul>
+          {% block links %}{% endblock %}
+      </div>
+      <div class="center">
+          {% block content %}{% endblock %}
+      </div>
+      <div class="footer">Primer za vezbe iz predmeta Softverski obrasci i komponente</div>
+</div>
+</body>
+</html>
