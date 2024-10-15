@@ -22,7 +22,7 @@ Aplikacija treba da se sastoji od sledećih komponenti:
 - **Web aplikacija**: `Django` aplikacija koja koristi platformu i plugine i omogućuje interakciju sa korisnikom pomoću 
   *Web* aplikacije.
 
-Platformu treba razviti kao biblioteku dok *plugin*-ove treba razviti kao komponente i instalirati ih u virtualno razvojno okruženje (`virtualenv`).
+Platformu treba razviti kao biblioteku do *plugin*-ove treba razviti kao komponente i instalirati ih u virtualno razvojno okruženje (`virtualenv`).
 Ovakvom arhitekturom pored *plugin*-ova omogućavamo da se i sama platforma može lako integrisati, na primer integrisati 
 u `Django` i u `FastAPI` framework.
 
@@ -36,7 +36,7 @@ Organizacija projekta treba da obuhvata sledeće foldere:
 - `block_visualizer` (ima dependency na `api`),
 - `graph_explorer` (`Django` projekat koji ima *dependency*-ije na platformu i sve *plugin*-e)
 
-**Napomena**: Dodeliti smislene nazive `plugin`-ova.
+**Napomena**: Dodeliti smislene nazive `plugin`-ova za učitavanje podataka.
 
 ## 2. Funkcionalnosti
 
@@ -204,6 +204,33 @@ rad sa više *workspace*-ova.
 > **Opciono**: Implentirati trajno čuvanje *workspace*-a kako bi se korisniku omogućilo da nastavi rad iz prethodne
 > sesije.
 
+#### 2.1.5. CLI
+
+Platforma treba da omogući manipulaciju grafa koristeći *Command Line Interface* (CLI). Korisniku treba omogućiti otvaranje
+terminala u kojem je moguće pomoću komandi raditi manipulaciju nad grafom. Terminal treba da bude svestan trenutnog grafa
+na `Main View`-u i da se komande izvršavanju nad grafom koji se nalazi na `Main View`. Minimum skup komandi koje je neophodno
+podržati:
+
+- Kreiranje novog ćvora, menjanje i brisanje postojećih čvora. Pod menjanjem se podrazumeva menjanje atributa čvora.
+  Brisanje čvora je moguće samo ukoliko nije uvezan ni sa jednom granom, u suprotnom moraju se prethodno obrisati
+  sve grane sa kojima je čvor uvezan.
+- Kreiranje novih grana, menjanje i brisanje postojećih grana. Pod menjanjem se podrazumeva menjanje atributa grane.
+- Filtirranje i pretraga grafa.
+- Brisanje kompletnog grafa odnosnog platna za iscrtavanje.
+
+Primer komandi:
+
+```txt
+create node --id=1 --property Name=Alice --property Age=25 --property Gender=F --property Height=160
+create node --id=2 --property Name=Tom --property Age=30 --property Gender=M --property Height=175
+create edge --id=1 --property Name=Siblings  1 2   # ćvorovi se referenciraju pomoću id-eva
+edit node --id=2 --property Age=40
+filter 'Age>30 && Height>=150'
+search 'Name=Tom'
+```
+
+> **Napomena**: Možete osmisliti svoju sintaksu kao i dodatne komande koje bi pomogle prilikom manipulacije grafa.
+
 ### 2.2. Data source plugin
 
 Data source plugin treba da određeni izvor podataka parsira i formira graf (iz modela). Izvori podataka mogu biti bilo
@@ -229,13 +256,8 @@ dokumenta, ali evo nekih primera:
 *Plugin* mora da obezbedit parsiranje i formiranje **cikilčnog grafa** (model grafa mora da podržava ciklične
 grafove). Određeni formati kao što je *RDF* podržavaju ciklične grafove i strukture, dok formati koji to ne podržavaju
 moraju se nadograditi tako da obezbede ciklične strukture. Nadogradnja tih formata bi se svodala na uvođenje dodatke
-semantike koja će omogućiti formiranje cikličnog grafa. *Plugin* i dalje treba da bude sposoban da parsira proizvoljan
-dokument tog formata i da detektuje da li je u pitanju ciklična struktura. Ako je u pitanju aciklična struktura, ne
-postoje nikakve pretpostavke i parsira se dokument u potpunosti. U slučaju da je ciklična, parsira se dokument u
-potpunosti i time se formira stablo, zatim se primenjuje definisana semantika tako što će se ordređena polja, atributi
-itd., tretirati na specifičan i zajedno sa već formiranim stablom koristiti za formiranje cikličnog grafa. Ispod se
-nalaze neki primeri ubacivanja semantike za formiranje cikličnih struktura koje niste u obavezi da se pridržavate i
-imate na rasploganju da osmislite svoju semantiku.
+semantike koja će omogućiti formiranje cikličnog grafa. Ispod se nalaze neki primeri ubacivanja semantike za formiranje 
+cikličnih struktura koje niste u obavezi da se pridržavate i imate na rasploganju da osmislite svoju semantiku.
 
 Primer cikličnog *JSON* dokumenta:
 
