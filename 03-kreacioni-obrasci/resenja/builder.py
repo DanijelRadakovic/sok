@@ -41,42 +41,62 @@ class HTMLBuilder(Builder):
 
 class MDBuilder(Builder):
     def build_title(self, text):
-        return f"#{text}"
+        return f"# {text}\n"
 
     def build_subtitle(self, text):
-        return f"## {text}"
+        return f"## {text}\n"
 
     def build_paragraph(self, text):
-        return text
+        return f"{text}\n"
 
     def build_list(self, items):
-        item_list = "\n".join([f"- {item}" for item in items])
+        item_list = "\n".join([f"- {item}" for item in items] + [""])
         return item_list
 
     def build_definition(self, term, definition):
         return f"**{term}** - {definition}"
 
 class Director:
-    def construct_doc(self, builder):
+    def __init__(self, builder: Builder):
+        self.builder = builder
+
+    def construct_homepage(self) -> str:
         out = ""
-        out += builder.build_title("Ovo je naslov")
-        out += builder.build_subtitle("Ovo je neki podnaslov")
-        out += builder.build_paragraph("Ovo je neki paragraph")
-        out += builder.build_list(["Stavka 1", "Stavka 2", "Stavka 3"])
-        out += builder.build_definition("Pojam 1", "Ovo je definicija pojma 1")
-        out += builder.build_definition("Pojam 2", "Ovo je definicija pojma 2")
+        out += self.builder.build_title("Ethereum")
+        out += self.builder.build_paragraph("Welcome to the Ethereum ecosystem!")
+        return out
+
+    def construct_profile_page(self) -> str:
+        out = ""
+        out += self.builder.build_title("Profile")
+
+        out += self.builder.build_subtitle("Personal information")
+        out += self.builder.build_paragraph("Name: Joe")
+        out += self.builder.build_paragraph("Lastname: Shooter")
+
+        out += self.builder.build_subtitle("Balance")
+        out += self.builder.build_paragraph("Tokens:")
+        out += self.builder.build_list(["ETH", "USDT", "SOL"])
+        out += self.builder.build_definition("Note", "Do not share your private key!")
+
         return out
 
 class Client:
-    def do_something(self):
-        dir = Director()
-        html_builder = HTMLBuilder()
-        md_builder = MDBuilder()
-        doc1 = dir.construct_doc(html_builder)
-        print(doc1)
-        doc2 = dir.construct_doc(md_builder)
-        print(doc2)
+    def __init__(self, director: Director):
+        self.director = director
+
+    def show_homepage(self):
+        print(self.director.construct_homepage())
+
+    def show_profile_page(self):
+        print(self.director.construct_profile_page())
+
 
 if __name__ == '__main__':
-    client = Client()
-    client.do_something()
+    client = Client(Director(HTMLBuilder()))
+    client.show_homepage()
+    client.show_profile_page()
+
+    client.director.builder = MDBuilder()
+    client.show_homepage()
+    client.show_profile_page()
