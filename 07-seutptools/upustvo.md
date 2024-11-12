@@ -7,3 +7,6 @@ Ove vežbe su namenje za bolje upoznavanje sa razvojom komponenti u programskom 
 koristeći [setuptools](http://www.igordejanovic.net/courses/tech/setuptools/#/slide-1) alat. Primer proširive aplikacije
 možete pronaći u direktorijumu `StudentskaSluzbaComponent` koji takođe predstavlja kostur i smernice za
 rešenje [zadataka](zadaci.md). Ista arhiva implementira gotovo identični skup funkcionalnosti za entitet `student`.
+
+Projekat `StudentskaSluzbaApiComponent` sadži dodatni modul `Api` koji je nasta izdvajanjem
+abstrakcija za plugin-ine iz `Core` komponente.

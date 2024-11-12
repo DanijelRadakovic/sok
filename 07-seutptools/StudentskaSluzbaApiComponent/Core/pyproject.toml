@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "studentska-sluzba-core"
+version = "0.1"
+description = "Komponenta za studentsku službu."
+dependencies = ["studentska-sluzba-api==0.1"]
+
+[project.optional-dependencies]
+test = []
+
+[project.entry-points."console_scripts"]
+sluzba_main = "rs.uns.ftn.studentska.sluzba.console_main:main"
+
+[tool.setuptools]
+provides = ["rs.uns.ftn.studentska.sluzba.services"]

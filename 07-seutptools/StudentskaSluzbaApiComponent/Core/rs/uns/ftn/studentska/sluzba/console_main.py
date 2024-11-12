@@ -1,7 +1,10 @@
 from typing import List, Union
 from importlib.metadata import entry_points
-from .services.fakultet import FakultetUcitatiBase, FakultetPrikazBase
 
+from rs.uns.ftn.studentska.sluzba.services.fakultet import (
+    FakultetUcitatiBase,
+    FakultetPrikazBase
+)
 
 def console_menu(*args, **kwargs):
     plugini: List[Union[FakultetUcitatiBase, FakultetPrikazBase]] = \

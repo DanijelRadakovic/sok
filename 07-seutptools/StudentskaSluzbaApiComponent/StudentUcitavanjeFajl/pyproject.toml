@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ucitavanje-studenti-fajl"
+version = "0.1"
+description = "Komponenta za ucitavanje studenata iz fajla."
+dependencies = ["studentska-sluzba-api==0.1"]
+
+[project.entry-points."student.ucitavanje"]
+ucitavanje_fajl = "rs.uns.ftn.studenti.ucitavanje_fajl:StudentiUcitavanjeFajl"
+
+[tool.setuptools]
+provides = ["rs.uns.ftn.studenti.ucitavanje_fajl"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.setuptools.data-files]
+fajlovi = ["fajlovi/studenti.txt"]
