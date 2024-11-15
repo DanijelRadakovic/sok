@@ -26,8 +26,6 @@ class Observer(ABC):
 class PritisakPrikaz(Observer):
     def __init__(self, merac_pritiska):
         self.merac_pritiska: MeracPritiska = merac_pritiska
-
-    def register(self):
         self.merac_pritiska.add_observer(self)
 
     def update(self):
@@ -37,11 +35,9 @@ class PritisakPrikaz(Observer):
 class SigurnosniVentil(Observer):
     def __init__(self, merac_pritiska):
         self.merac_pritiska: MeracPritiska = merac_pritiska
+        self.merac_pritiska.add_observer(self)
         self.opened = False
         self.limit = 80
-
-    def register(self):
-        self.merac_pritiska.add_observer(self)
 
     def update(self):
         if self.opened:
@@ -69,12 +65,13 @@ def client():
     ventil = SigurnosniVentil(merac)
     prikaz = PritisakPrikaz(merac)
 
-    ventil.register()
-    prikaz.register()
-
     merac.podesi_pritisak(50)
     merac.podesi_pritisak(90)
     merac.podesi_pritisak(70)
+
+    merac.delete_observer(ventil)
+    merac.podesi_pritisak(30)
+    merac.podesi_pritisak(100)
 
 
 if __name__ == "__main__":
