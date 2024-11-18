@@ -75,10 +75,9 @@ def main():
         return
 
     try:
-        fakulteti = []
         console_menu(fakultet_ucitavanje=fakultet_ucitavanje,
                      fakultet_prikaz=fakultet_prikaz,
-                     fakulteti=fakulteti)
+                     fakulteti=[])
 
     except Exception as e:
         print(f"Error: {e}")
