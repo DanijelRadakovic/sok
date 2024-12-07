@@ -2,43 +2,64 @@ U ovom primeru koristi se Django modul za implementaciju web aplikacije koja cuv
 Za ovaj primer potrebno je imati instaliran pip, setuptools, Django.
 Preporucljivo je instalirati Django u virtuelnom okruzenju sa komandom
 
+```shell
 pip install Django
+```
 
 Za novi Django projekat pokrenuti komandu
 
+```shell
 django-admin startproject naziv_projekta
+```
+
 
 Za kreiranje inicijalne seme baze podataka pokrenuti komandu
 
+```shell
 python manage.py migrate
+```
 
 Za admin aplikaciju treba kreirati superuser nalog komandom
 
+```shell
 python manage.py createsuperuser
+```
 
 Zatim treba kreirati aplikaciju komandom
 
+```shell
 python manage.py startapp naziv_aplikacije
+```
 
-Kada se izmeni models.py modul u direktorijumu prodavnice
+Kada se izmeni `models.py` modul u direktorijumu prodavnice
 potrebno je pokrenuti komandu
 
+```shell
 python manage.py makemigrations prodavnice
+```
 
 da bi se dobili fajlovi za kreiranje tabela u bazi.
 Sa dobijenim fajlovim treba ponovo pokrenuti komandu
 
+```shell
 python manage.py migrate
+```
 
 da bi se kreirale nove tabela sa dobijenim fajlovima za prodavnice
 aplikaciju.
 Za popunjavanje tabela sa inicijalnim vrednostima pokrenuti komandu
 
+```shell
 python manage.py popuni_bazu
+```
 
 Server se moze pokrenuti komandom
 
+```shell
 python manage.py runserver
+```
+
+## Podesavanje virtualnog okruzenja
 
 Preporucljivo je da se instaliranje vrsi u posebnom virtualnom okruzenju
 Da bi mogli da koristite pip komandu mozete instalirati po uputstvu sa sajta
@@ -47,21 +68,33 @@ https://pip.pypa.io/en/stable/installing/
 
 Zatim treba instalirati virtualenv alat komandom
 
+```shell
 pip install virtualenv
+```
+
 
 Kreirati novo virtualno okruzenje koristeci komandu
 
+```shell
 virtualenv NAZIV_OKRUZENJA
+```
+
 
 Kreirano virtualno okruzenje mozete aktivirati komandom
 
 Za Linux
 
+```shell
 source NAZIV_OKRUZENJA/bin/activate
+```
+
 
 Za Windows
 
+
+```shell
 NAZIV_OKRUZENJA\Scripts\activate
+```
 
 Da bi se ovaj primer mogao pokrenuti potrebno je postaviti putanju do python interpretera
 virtuelnog okruzenja u PyCharm razvojnom okruzenju tako sto se ode na
