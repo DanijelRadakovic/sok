@@ -1,0 +1,42 @@
+svg{
+  border:1px black solid;
+  }
+
+.left {
+  margin: 0px;
+  float: left;
+  width: 30%;
+
+}
+.header, .footer{
+  background-color: lightblue;
+  clear: left;
+  width:100%;
+  border: solid black 1px;
+}
+
+.center{
+ margin-left: 30%;
+ width: 70%;
+ border-left: solid black 1px;
+}
+
+
+.page{
+  text-align: center;
+  margin: auto;
+  min-width: 50%;
+  width: 80%;
+}
+
+table{
+  margin: 0 auto;
+}
+
+.label{
+ clear: left;
+}
+
+.greska{
+  color: red;
+}

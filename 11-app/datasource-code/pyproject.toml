@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shop-datasource-code"
+version = "0.1"
+description = "Component for loading shop data fixed in code."
+dependencies = [
+    "shop-api==0.1",
+    "Django>=5.1"
+]
+
+[project.entry-points."shop.datasource"]
+datasource_db = "shop.code.datasource:CodeDatasource"
+
+[tool.setuptools]
+provides = ["shop.code.datasource"]

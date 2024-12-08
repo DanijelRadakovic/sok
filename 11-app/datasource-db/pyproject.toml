@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shop-datasource-db"
+version = "0.1"
+description = "Component for loading and saving shop data to database."
+dependencies = [
+    "shop-api==0.1",
+    "Django>=5.1"
+]
+
+[project.entry-points."shop.datasource"]
+datasource_db = "shop.db.datasource:DatabaseDatasource"
+
+[tool.setuptools]
+provides = ["shop.db.datasource"]
