@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--Ucitavanje d3.js biblioteke moguce je na ovaj nacin.-->
+    {% load static %}
+<!-- Download d3.v3.js from a website-->
+<!--    <script type="text/javascript" src="https://d3js.org/d3.v3.js"></script>-->
+<!-- Use local d3.v3.js -->
+    <script type="text/javascript" src="{% static 'd3.v3.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'style.css' %}"/>
+    <title>{{title}}</title>
+    {% block head_content %}{% endblock %}
+</head>
+<body>
+<div class="page">
+      <div class="header">
+          <div>
+          <a href="{% url 'index' %}">Shop</a>
+          </div>
+          <div>
+              {% if datasource_plugins %}
+                 {% for p in datasource_plugins %}
+                    <!--Prikazivanje dostupnih plugina korisniku-->
+                    <a href="{% url 'datasource_plugin' id=p.identifier %}">{{p.name}}</a>
+                 {% endfor %}
+              {% else %}
+                <h3>Not recognized any datasource plugin</h3>
+              {% endif %}
+          </div>
+      </div>
+      <div class="left">
+          <ul>
+              <li>
+                  <a href="{% url 'tree_layout' %}">Tree layout</a>
+              </li>
+          </ul>
+          {% block links %}{% endblock %}
+      </div>
+      <div class="center">
+          {% block content %}{% endblock %}
+      </div>
+</div>
+</body>
+</html>

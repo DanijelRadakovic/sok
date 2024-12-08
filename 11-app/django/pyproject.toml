@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shop-django"
+version = "0.1"
+description = "Shop web application."
+dependencies = [
+    "shop-core==0.1",
+    "Django>=5.1"
+]
