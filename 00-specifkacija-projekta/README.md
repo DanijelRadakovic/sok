@@ -12,14 +12,13 @@ Aplikacija treba da se sastoji od sledećih komponenti:
   komunikaciju između *plugin*-ova.
 - **Plugin**:
     - **Data source plugin**: parsira određeni skup podataka i pri tome konstruiše graf (model podataka).
-    - **Visualizer plugin**:  radi vizualiaciju modela podataka uz oslonac na `Django template`-a i `force-layout D3.js`
-      biblioteku.
+    - **Visualizer plugin**:  radi vizualiaciju modela podataka  u vidu grafa.
 - **API**: `Python` biblioteka koja sadrži apstrakcije koji modeluju API (i sam model podataka) za`Data source`
   i `Visualizer` *plugin*-ova. Ova biblioteka se koristi kao *dependency* od strane platforme (koja koristi API) i
   svih *plugin*-ova (koji implemntiraju API). Takođe, kod je neophodno dokumentovati kako bi se olakšalo korišćenje same
   biblioteke. Ideja ove biblioteke je da olakša komunikaicju između *plugin*-ova i platforme i preporučuje se korišćenje
   `abs` i `typing` paketa. **Opciono**: verzionisanje biblioteke u skladu sa [Semantic Versioning](https://semver.org/).
-- **Web aplikacija**: `Django` aplikacija koja koristi platformu i plugine i omogućuje interakciju sa korisnikom pomoću 
+- **Web aplikacija**: `Django` ili `Flask` aplikacija koja koristi platformu i plugine i omogućuje interakciju sa korisnikom pomoću 
   *Web* aplikacije.
 
 Platformu treba razviti kao biblioteku do *plugin*-ove treba razviti kao komponente i instalirati ih u virtualno razvojno okruženje (`virtualenv`).
@@ -34,7 +33,7 @@ Organizacija projekta treba da obuhvata sledeće foldere:
 - `data_source_plugin-2` (ima dependency na `api`),
 - `simple_visualizer` (ima dependency na `api`),
 - `block_visualizer` (ima dependency na `api`),
-- `graph_explorer` (`Django` projekat koji ima *dependency*-ije na platformu i sve *plugin*-e)
+- `graph_explorer` (`Django` ili `Flask` projekat koji ima *dependency*-ije na platformu i sve *plugin*-e)
 
 **Napomena**: Dodeliti smislene nazive `plugin`-ova za učitavanje podataka.
 
@@ -207,7 +206,7 @@ rad sa više *workspace*-ova.
 #### 2.1.5. CLI
 
 Platforma treba da omogući manipulaciju grafa koristeći *Command Line Interface* (CLI). Korisniku treba omogućiti otvaranje
-terminala u kojem je moguće pomoću komandi raditi manipulaciju nad grafom. Terminal treba da bude svestan trenutnog grafa
+terminala na UI u kojem je moguće pomoću komandi raditi manipulaciju nad grafom. Terminal treba da bude svestan trenutnog grafa
 na `Main View`-u i da se komande izvršavanju nad grafom koji se nalazi na `Main View`. Minimum skup komandi koje je neophodno
 podržati:
 
@@ -435,7 +434,7 @@ Primer grafa:
 *Data source plugin* parsira izvorište podataka i na osnovu toga instancira klase modela kako bi napravio graf. Taj graf
 prosleđuje platformi koja ga negde interno sačuva (npr. `AppConfig`, baza, itd). Nakon toga, platforma šalje
 podatke *plugin*-u za vizualizaciju koji na osnovu njih gradi *HTML(+CSS+JS) DOM* stablo. Taj *HTML* se vraća platformi
-koja ga umeće na odgovarajuće mesto trenutno prikazanog *Django template*-a.
+koja ga umeće na odgovarajuće mesto na web stranici.
 
 Kada korisnik poželi da pretraži ili filtrira čvorove grafa, to radi platforma nad grafom koji je negde prethodno
 perzistirala (videti prethodni pasus). Rezultat ove operacije je podgraf koji se šalje *visualizer plugin*-u, koji
@@ -445,9 +444,20 @@ ponovo gradi *HTML DOM* stablo. Ono biva vraćeno platformi i umetnutno u *templ
 
 ### 3.1. Raspodela posla
 
-Neophodno je implementirati platformu i minimalno 4 *plugin*-a, ukoliko tim broji 3 ili 4 člana. Ukoliko je tim
-sastavljen od 5 studenata, tada je potrebno razviti 5 *plugin*-a. Svaki od članova tima mora razviti minimalno jedan
-plugin. Broj *Visualizer plugin*-a je 2, dok je broj *Data source plugin*-a je 2, odnosno 3.
+Timovi koji sadrže 3 ili 4 člana neophodno je da:
+
+ - implementiraju platformu,
+ - implemntiraju 4 *plugin*-a, 2 *Visualizer plugin*-a i 2 *Data source plugin*-a,
+ - odaberu da li će koristiti `Django` ili `Flask`.
+
+Timovi koji sadrže 5 članova neophodno je da:
+
+ - implementiraju platformu,
+ - implemntiraju 5 *plugin*-a, 2 *Visualizer plugin*-a i 3 *Data source plugin*-a,
+ - implemntiraju aplikaciju u oba frejmvorka, `Django` i `Flask`.
+ 
+> **Napomena**: Nezavisno od broja članova u timu, rešenje mora da bude dezijanirano tako da ne zavisi od web
+> frejmvorka i da se može lako prebaciti na neki drugi frejmvorka. 
 
 > **Pitanje**: Da li je u redu da izvorišta podataka budu dva dokumenta istog tipa (npr. *JSON*), koji sadrže različite
 > podatke (npr. jedan sadrži informacije o avio-linijama, dok drugi sadrži informacije o društvenim mrežama). <br/>
@@ -492,25 +502,20 @@ nema smisla. Primena obazaca u projektu će se diskutovati na odbrani projekta.
 Neophodno je na nivou tima kreirati `GitLab` ili `GitHub` repozitorijum (ostali `git` provider-i nisu dozvoljeni za
 korišćenje).
 
-Git repozitorijum voditi po
-preporučenom [GitFlow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) modelu. Potrebno je
-da da imate develop granu na kojoj se nalazi kod koji se intenzivno razvija i koji često testiraju svi članovi tima. Kod
-na ovoj grani mora da radi, a čine ga do datog trenutka implementirane funkcionalnosti koje su dovoljno dobro
-istestirane.
+Git repozitorijumu koristiti [Trunk Based Development](https://trunkbaseddevelopment.com/). Postoji jedna grana, `main`
+na kojoj se integrišu sve promene. Potrebno je da imate `main` granu na kojoj se nalazi kod koji se intenzivno razvija 
+i koji često testiraju svi članovi tima. Kod na ovoj grani mora da radi, a čine ga do datog trenutka implementirane 
+funkcionalnosti koje su dovoljno dobro istestirane.
 
 Razvoj nove funkcionalnosti radi se na posebnoj *feature* grani. Svaka feature grana odgovara tačno jednom *GitHub
 issue*-u. Ove grane predstavljaju alternativne tokove razvoja. Jednu funkcionalnost radi jedan student. Kada se
-funkcionalnost završi, potrebno je ovu granu spojiti sa *develop* granom putem *merge request*-a (*pull request*-a).
+funkcionalnost završi, potrebno je ovu granu spojiti sa *main* granom putem *merge request*-a (*pull request*-a).
 *Feature* grane imenovati u formatu `feature-<naziv_grane>`.
 
 U slučaju da primetite neki *bug*, tada pronalazite *issue* koji odgovara funkcionalnosti, ponovo ga otvarate i kreirate
 odgovarajući *bugfix* granu (format imenovanja je `bugfix-<naziv_grane>`). Na njoj popravljate bug i radite inicijalno
-testiranje. Kada ste utvrdili da je problem otklonjen, kod spajate sa *develop* granom putem *merge request*-a (*pull
+testiranje. Kada ste utvrdili da je problem otklonjen, kod spajate sa *main* granom putem *merge request*-a (*pull
 request*-a).
-
-Periodično, kod sa *develop* grane prebacujete na *master* granu. *Master* treba da ima stabilnu verziju projekta i
-*merge* na *master* grani će se raditi samo prilikom implementacije *milestone*-a, odnosno kada završite kontrolnu tačku
-ili projekat.
 
 *Milestone* oslikava jedan bitan momenat životnog ciklusa vaše aplikacije. Što se tiče ovog projekta možete da
 imate 2-3 *milestone*-a. Rokovi su: I kontrolna tačka, (eventualno II kontrolna tačka) i Predaja projekta (biće naknadno
@@ -521,7 +526,7 @@ Jedan *task* treba da se odnosi na jednu funkcionalnost aplikacije (engl. *featu
 posebnoj *feature* grani. *Task*-ove je potrebno napraviti unapred za *milestone* koji je u toku. Zatim, svaki student
 uzima *task* po *task* (dodeljuje mu se *issue*), te započinje implementaciju odgovarajuće funkcionalnosti. Kada se
 implementacija funkcionalnosti završi i uspešno odradi inicijalno testiranje, task se zatvara, a kod prebacuje na
-*develop* granu. Nakon toga, ostale kolege treba da urade testiranje svih funkcionalnosti. Ukoliko se ustanovi problem u
+*main* granu. Nakon toga, ostale kolege treba da urade testiranje svih funkcionalnosti. Ukoliko se ustanovi problem u
 nekoj od njih, potrebno je ponovo otvoriti odgovarajući task (ne praviti nov).
 
 **Sve commit poruke moraju početi sa `#jedinstveni-identifikator-issue` kako bi se referencirao issue na koga se
@@ -624,5 +629,5 @@ Kontrolna tačka ne nosi bodove.
 Održavaju se 3 termina odbrane projekta:
 
 1. Janurasko-februarskom ispitnom roku (max 60 bodova).
-2. Junsko-julskom roku (osvojenih bodovi se skaliraju sa 0.9).
-3. Avgustovsko-septembarskom roku (osvojeni bodovi se skaliraju sa 0.8).
+2. Junsko-julskom ispitnom roku (max 60 bodova).
+3. Avgustovsko-septembarskom ispitnom roku (max 60 bodova).
