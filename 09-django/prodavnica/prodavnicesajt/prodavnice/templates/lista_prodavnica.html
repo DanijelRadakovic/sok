@@ -21,7 +21,7 @@
         <td>{{p.naziv}}</td>
         <td>{{p.adresa}}</td>
         <td>{{p.broj_telefona}}</td>
-        <td><a href="{% url 'unos_prodavnice_p' id=p.id%}" >Izmeni</a> </td>
+        <td><a href="{% url 'unos_prodavnice_p' id=p.id%}" >Izmeni</a></td>
         <td><a href="{% url 'brisanje_prodavnice' id=p.id %}">Obrisi</a></td>
       </tr>
     {% endfor %}
