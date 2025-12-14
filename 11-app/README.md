@@ -1,37 +1,37 @@
-
-
 ## Podesavanje projekta
 
-Instalacija dev alata kako bi se omogućio development prilikom
-razvoja aplikacije nad komponentama
+Instalacija neophodnih paketa:
 
 ```shell
 pip install -r requirements.txt
 ```
 
-Podesavanje aplikacije
+Instaliracija komponenti i plugin-a;
 
 ```shell
 pip install ./api ./core ./datasource-code ./datasource-db
+```
 
+## Pokretanje Django aplikacije
+
+```shell
+cd django
 python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver
 ```
 
-### Rad sa migracijama
+Obratiti pažnju da nakon interakcije sa `datasource-db` plugin-om u `django` projektu treba da se nalaze 2 baze:
 
-`python manage.py makemigrations` cuva migracije u `site-package/shop/db/migrations`
-tako da ukoliko je neophodno obrisati migracije (i generistai ponovo) neopdho je 
-obrisati fajl sa te lokacije.
+- `db.slite3` - baza koju Django interno koristi,
+- `shop.db` - baza koja je kreirana korisćenejem `datasource-db` plugin-a.
 
-### Napomena
+![django.png](.docs/django.png)
 
-Rad sa bazom koristeci Django biblioteku nije toliko nezavisan zbog samo
-nacina funkcionisanja Django framework-a. Djano aplikacija je zbog toga 
-"svesna" plugin-a za ucitanje iz baze tako sto smo morali da dodamo plugin
-kao Django aplikaciju konfiguracijom `INSTALLED_APPS` sekciju ([ovde](django/sites/settings.py)).
 
-Neko bolje resenje bi bilo da se koristi neka druga biblioteka za bazu i time
-uspostavili kompletnu nezavisnost izmedju django aplikacije i plugin-a za 
-ucitavanje iz baze.
+## Pokretanje Flask aplikacije
+
+```shell
+cd flask
+flaks run
+```

@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'style.css' %}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
     <title>{{title}}</title>
     {% block head_content %}{% endblock %}
 </head>
@@ -11,13 +10,13 @@
 <div class="page">
       <div class="header">
           <div>
-          <a href="{% url 'index' %}">Shop</a>
+          <a href="{{ url_for('index') }}">Shop</a>
           </div>
           <div>
               {% if datasource_plugins %}
                  {% for p in datasource_plugins %}
                     <!--Prikazivanje dostupnih plugina korisniku-->
-                    <a href="{% url 'datasource_plugin' id=p.identifier %}">{{p.name}}</a>
+                    <a href="{{ url_for('datasource_plugin', id=p.identifier()) }}">{{p.name()}}</a>
                  {% endfor %}
               {% else %}
                 <h3>Not recognized any datasource plugin</h3>
@@ -27,7 +26,7 @@
       <div class="left">
           <ul>
               <li>
-                  <a href="{% url 'tree_layout' %}">Tree layout</a>
+                  <a href="{{ url_for('tree_layout') }}">Tree layout</a>
               </li>
           </ul>
           {% block links %}{% endblock %}
