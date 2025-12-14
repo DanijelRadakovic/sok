@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+    <title>{{ title }}</title>
+</head>
+<body>
+<div class="page">
+          <div class="header"><a href="{{ url_for('index') }}">Evidencija prodavnica</a></div>
+          <div class="left">
+              <ul>
+                  <li>
+                      <a href="{{ url_for('index') }}">Home</a>
+                  </li>
+                  <li>
+                      <a href="{{ url_for('lista_prodavnica') }}">Prodavnice</a>
+                  </li>
+                  <li>
+                      <a href="{{ url_for('lista_artikala') }}">Artikli</a>
+                  </li>
+                  <li>
+                      <a href="{{ url_for('lista_kategorija') }}">Kategorije</a>
+                  </li>
+              </ul>
+              {% block links %}{% endblock %}
+          </div>
+          <div class="center">
+              {% block content %}{% endblock %}
+          </div>
+          <div class="footer">Primer za vezbe iz predmeta Softverski obrasci i komponente</div>
+</div>
+</body>
+</html>

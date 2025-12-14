@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block links %}
+    <ul>
+        <li><a href="{{ url_for('unos_prodavnice') }}">Unesi prodavnicu</a></li>
+    </ul>
+{% endblock %}
+{% block content %}
+{% if prodavnice %}
+    <table>
+      <tr>
+        <th>PIB</th>
+        <th>Naziv</th>
+        <th>Adresa</th>
+        <th>Broj telefona</th>
+        <th>Izmena</th>
+        <th>Brisanje</th>
+      </tr>
+    {% for p in prodavnice %}
+      <tr>
+        <td>{{p.pib}}</td>
+        <td>{{p.naziv}}</td>
+        <td>{{p.adresa}}</td>
+        <td>{{p.broj_telefona}}</td>
+        <td><a href="{{ url_for('unos_prodavnice', pib=p.pib) }}">Izmeni</a></td>
+        <td><a href="{{ url_for('brisanje_prodavnice', pib=p.pib) }}">Obrisi</a></td>
+      </tr>
+    {% endfor %}
+    </table>
+{% else %}
+   <p>Nema prodavnica za prikaz</p>
+{% endif %}
+{% endblock %}

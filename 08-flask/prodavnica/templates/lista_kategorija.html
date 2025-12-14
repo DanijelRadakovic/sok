@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+{% if kategorije %}
+    <table>
+      <tr>
+        <th>Oznaka</th>
+        <th>Naziv</th>
+      </tr>
+    {% for k in kategorije %}
+      <tr>
+        <td>{{k.oznaka}}</td>
+        <td>{{k.naziv}}</td>
+      </tr>
+    {% endfor %}
+    </table>
+{% else %}
+   <p>Nema kategorija za prikaz</p>
+{% endif %}
+{% endblock %}

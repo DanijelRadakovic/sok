@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block links %}
+    <ul>
+        <li><a href="{{ url_for('unos_artikla') }}">Unesi artikal</a></li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+{% if artikli %}
+    <table>
+      <tr>
+        <th>Oznaka</th>
+        <th>Naziv</th>
+        <th>Opis</th>
+        <th>Cena</th>
+        <th>Na akciji</th>
+        <th>Kategorije</th>
+        <th>Prodavnica</th>
+        <th>Izmena</th>
+        <th>Brisanje</th>
+      </tr>
+    {% for a in artikli %}
+      <tr>
+        <td>{{ a.oznaka }}</td>
+        <td>{{ a.naziv }}</td>
+        <td>{{ a.opis }}</td>
+        <td>{{ a.cena }}</td>
+        <td>{{ a.na_akciji }}</td>
+        <td>
+            {% for k in a.kategorije %}
+                {{ k.naziv }}
+            {% endfor %}
+        </td>
+        <td>
+            {% if a.prodavnica %}
+                {{ a.prodavnica.naziv }}
+            {% endif %}
+        </td>
+        <td><a href="{{ url_for('unos_artikla', oznaka=a.oznaka) }}">Izmeni</a></td>
+        <td><a href="{{ url_for('brisanje_artikla', oznaka=a.oznaka) }}">Obrisi</a></td>
+      </tr>
+    {% endfor %}
+    </table>
+{% else %}
+   <p>Nema artikala za prikaz</p>
+{% endif %}
+{% endblock %}
