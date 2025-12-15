@@ -11,13 +11,16 @@ samo na konzoli ispisati koje sortiranje se obavlja.
 
 ## Zadatak 2
 
-Simulator kotla za grejanje se, između ostalog, sastoji od klase `MeracPritiska` sa metodama int `uzmi_pritisak()` koja
-vraća tekući pritisak u kotlu i metodom `podesi_pritisk(int)` sa kojom se postavlja tekući pritisak. Za prikaz pritiska
-zadužena je GUI klasa `PritisakPrikaz`. Takod̄e, sigurnosni ventil, predstavljen klasom `SigurnosniVentil` treba da
-automatski reaguje kada pritisak u kotlu pred̄e unapred zadatu vrednost i da se otvori. Korišćenjem `Observer` dizajn
-obrasca simulirati rad kotla pri čemu će se iz test klase postavljati vrednost pritiska u kotlu dok će se pritisak
-prikazivati iz metoda klase `PritisakPrikaz` a otvaranje sigurnosnog ventila će biti prikazano iz metoda
-klase `SigurnosniVentil`. Svi prikazi treba da budu na konzoli.
+Simulator kotla za grejanje se, između ostalog, sastoji od klase `MeracPritiska` sa metodama: 
+- `uzmi_pritisak() -> int`: koja vraća tekući pritisak u kotlu, 
+- `podesi_pritisk(int)`: postavlja tekući pritisak.
+
+Za prikaz pritiska zadužena je klasa `PritisakPrikaz`. Takod̄e, sigurnosni ventil, predstavljen klasom `SigurnosniVentil`,
+treba da automatski reaguje kada pritisak u kotlu pred̄e unapred zadatu vrednost i da se otvori. 
+
+Korišćenjem `Observer` dizajn obrasca simulirati rad kotla pri čemu će se iz test klase postavljati vrednost pritiska 
+u kotlu dok će se pritisak prikazivati iz metoda klase `PritisakPrikaz` a otvaranje sigurnosnog ventila će biti 
+prikazano iz metoda klase `SigurnosniVentil`. Svi prikazi treba da budu na konzoli.
 
 ## Zadatak 3
 

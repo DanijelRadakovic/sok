@@ -2,25 +2,25 @@ from abc import ABC, abstractmethod
 from typing import List
 
 
+class Observer(ABC):
+    @abstractmethod
+    def update(self):
+        pass
+
+
 class Observable(ABC):
     def __init__(self):
         self.observers: List[Observer] = []
 
-    def add_observer(self, observer):
+    def add_observer(self, observer: Observer):
         self.observers.append(observer)
 
-    def delete_observer(self, observer):
+    def delete_observer(self, observer: Observer):
         self.observers.remove(observer)
 
     def notify(self):
         for obs in self.observers:
             obs.update()
-
-
-class Observer(ABC):
-    @abstractmethod
-    def update(self):
-        pass
 
 
 class PritisakPrikaz(Observer):
@@ -62,8 +62,9 @@ class MeracPritiska(Observable):
 
 def client():
     merac = MeracPritiska()
-    ventil = SigurnosniVentil(merac)
     prikaz = PritisakPrikaz(merac)
+    ventil = SigurnosniVentil(merac)
+
 
     merac.podesi_pritisak(50)
     merac.podesi_pritisak(90)
@@ -73,6 +74,8 @@ def client():
     merac.podesi_pritisak(30)
     merac.podesi_pritisak(100)
 
+    merac.delete_observer(prikaz)
+    merac.podesi_pritisak(40)
 
 if __name__ == "__main__":
     client()

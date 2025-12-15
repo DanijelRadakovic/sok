@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+from typing import List
 
 class Student:
     def __init__(self, broj_indeksa: int, ime: str, prezime: str):
@@ -13,7 +13,7 @@ class StudentSelectionSort(ABC):
     def compare(self, student1: Student, student2: Student) -> int:
         pass
 
-    def sort(self, students_list):
+    def sort(self, students_list: List[Student]):
         n = len(students_list)
         for i in range(n - 1):
             min_idx = i
@@ -66,15 +66,24 @@ def client():
 
     indeks_sort.sort(students)
     print("Sortirani po broju indeksa:")
-    print(f"{student.brojIndeksa}: {student.ime} {student.prezime}" for student in students)
+    for student in students:
+        print(f"Indeks: {student.brojIndeksa}")
+        print(f"Ime: {student.ime}")
+        print(f"Prezime: {student.prezime}")
 
     ime_sort.sort(students)
     print("\nSortirani po imenu:")
-    print(f"{student.brojIndeksa}: {student.ime} {student.prezime}" for student in students)
+    for student in students:
+        print(f"Indeks: {student.brojIndeksa}")
+        print(f"Ime: {student.ime}")
+        print(f"Prezime: {student.prezime}")
 
     prezime_sort.sort(students)
     print("\nSortirani po prezimenu:")
-    print(f"{student.brojIndeksa}: {student.ime} {student.prezime}" for student in students)
+    for student in students:
+        print(f"Indeks: {student.brojIndeksa}")
+        print(f"Ime: {student.ime}")
+        print(f"Prezime: {student.prezime}")
 
 
 if __name__ == "__main__":
