@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ucitavanje-student-kod"
+version = "0.1"
+description = "Komponenta za ucitavanje studenata iz koda."
+dependencies = ["studentska-sluzba-api==0.1"]
+
+[project.entry-points."student.ucitavanje"]
+ucitavanje_fajl = "ftn.student.ucitavanje_kod:StudentiUcitavanjeKod"
+
+[tool.setuptools]
+provides = ["ftn.student.ucitavanje_kod"]

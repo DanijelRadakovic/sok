@@ -1,1 +1,0 @@
-# Ovaj paket nece biti prijavljen kao namespace.

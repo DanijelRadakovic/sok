@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prikaz-fakultet-slozen"
+version = "0.1"
+description = "Komponenta za slozen prikaz fakulteta."
+dependencies = ["studentska-sluzba-api==0.1"]
+
+[project.entry-points."fakultet.prikaz"]
+prikaz_slozen = "ftn.fakultet.prikaz_slozen:FakultetPrikazSlozen"
+
+[tool.setuptools]
+provides = ["ftn.fakultet.prikaz_slozen"]

@@ -1,0 +1,9 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "studentska-sluzba-api"
+version = "0.1"
+description = "Komponenta koja sadzi definisan API studentske službe."
+dependencies = []

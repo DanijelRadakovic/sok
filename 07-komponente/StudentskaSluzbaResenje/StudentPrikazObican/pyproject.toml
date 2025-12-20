@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prikaz-student-obican"
+version = "0.1"
+description = "Komponenta za obizan prikaz studenata."
+dependencies = ["studentska-sluzba-api==0.1"]
+
+[project.entry-points."student.prikaz"]
+ucitavanje_fajl = "ftn.student.prikaz_obican:StudentiPrikazObican"
+
+[tool.setuptools]
+provides = ["ftn.student.prikaz_obican"]
