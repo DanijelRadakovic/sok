@@ -8,7 +8,7 @@ omogućava da sa lakoćom menjate određene komponente vašeg softvera korišće
 
 Aplikacija treba da se sastoji od sledećih komponenti:
 
-- **Platforma**: biblioteka koja sadrži glavne funkcionalnosti nad manipulacijom grafa i sprovodi
+- **Platforma (Core)**: biblioteka koja sadrži glavne funkcionalnosti nad manipulacijom grafa i sprovodi
   komunikaciju između *plugin*-ova.
 - **Plugin**:
     - **Data source plugin**: parsira određeni skup podataka i pri tome konstruiše graf (model podataka).
@@ -21,9 +21,9 @@ Aplikacija treba da se sastoji od sledećih komponenti:
 - **Web aplikacija**: `Django` ili `Flask` aplikacija koja koristi platformu i plugine i omogućuje interakciju sa korisnikom pomoću 
   *Web* aplikacije.
 
-Platformu treba razviti kao biblioteku do *plugin*-ove treba razviti kao komponente i instalirati ih u virtualno razvojno okruženje (`virtualenv`).
-Ovakvom arhitekturom pored *plugin*-ova omogućavamo da se i sama platforma može lako integrisati, na primer integrisati 
-u `Django` i u `FastAPI` framework.
+Platformu treba razviti kao biblioteku, dok *plugin*-ove treba razviti kao komponente i instalirati ih u virtualno razvojno okruženje (`virtualenv`).
+Ovakvom arhitekturom, pored *plugin*-ova, omogućavamo da se i sama platforma može lako integrisati, na primer 
+u `Django` ili `FastAPI` framework-u.
 
 Organizacija projekta treba da obuhvata sledeće foldere:
 
@@ -122,7 +122,7 @@ Slika ispod prestavlja primer kako bi UI mogao da izgleda (ne morate te se strik
 ![tree-view-recursion.png](.docs/tree-view-recursion.png)
 
 > **Pitanje**: Da li Tree View i Bird View treba implementirati kao posebne plugin-e? <br/>
-> **Odgovor**: Može, ali nije neophodno. Dovoljno je da budu deo *Django* aplikacije.
+> **Odgovor**: Može, ali nije neophodno.
 
 > **Napomena**: Upotreba `D3.js` biblioteke nije obavezna ali se preporucuje.
 
@@ -135,10 +135,10 @@ Slika ispod prestavlja primer kako bi UI mogao da izgleda (ne morate te se strik
 > usporavala preuzimanja sadržaja sa istog.
 
 
-> **Pitanje**: Kod main prikaza grafa, ukoliko imamo situaciju da postoji grana `A->B` i grana `B->A`, te grane će se na
+> **Pitanje**: Ukoliko imamo situaciju da u `MainView`-u postoji grana `A->B` i grana `B->A`, te grane će se na
 > grafu preklopiti i videće se jedna linija. Da li je to problem ili možemo da ostavimo tako? <br/>
-**Odgovor**: Ukoliko stignete (nakon što sve ostalo odraite), pokušajte da prilagodite ForceLayout da se povratne grane
-> ne preklapaju.
+**Odgovor**: S obzirom na to da je u pitanju usmeren graf, obe grane treba da se prikažu tako da se ne preklapaju. 
+> U slučaju neusmerenog grafa ove će biti jedna grana. 
 
 #### 2.1.2. Pretraga i filtriranje grafa
 
@@ -165,7 +165,7 @@ inicijalni graf prepušten je studentima. Potrudite se da za to odaberete akciju
 
 > **Napomena**: Pretraga i filtriranje grafa je treba primeniti na `Main View`, `Tree View` i `Bird View`.
 
-> **Napomena**: Nije dozvoljeno pretragu i filtriranje raditi u JavaScript-u na frontend-u.
+> **Napomena**: Dozvoljeno pretragu i filtriranje raditi u JavaScript-u na frontend-u.
 
 > **Pitanje**: Da li je u redu da nakon izvršene pretrage ili filtriranja grafa, čvorovi koji odgovaraju unetim
 > parametrima budu samo prikazani drugom bojom? <br/>
@@ -173,8 +173,8 @@ inicijalni graf prepušten je studentima. Potrudite se da za to odaberete akciju
 > odgovarajući plugin za vizuelizaciju prikazati.
 
 > **Pitanje**: Imam pitanje u vezi filter opcije. Većina atributa u nasim izvorima su stringovi ili string
-> reprezentacija brojeva. Kada radimo filter, da li da pokusamo prvo da ih parsiramo u int vrednost i tako poredimo
-> poredbenim operatorima (`<`, `>`, `==`, ...) ili mozemo da ih poredimo sve leksikografski? <br/>
+> reprezentacija brojeva. Kada radimo filter, da li da pokusamo prvo da ih parsiramo u `int` vrednost i tako poredimo
+> operatorima (`<`, `>`, `==`, ...) ili mozemo da ih poredimo sve leksikografski? <br/>
 > **Odgovor**: Zadatak plugina za parsiranje je da podatke parsira u one tipove koje podaci predstavljaju. Svakako da
 > treba posebno izdvojiti brojeve, datume, itd. u odgovarajuće tipove podataka. Filter primenjuje relaciju poretka u
 > skladu sa tipom atributa.
@@ -185,7 +185,7 @@ Model grafa nakon parsiranja moguće je čuvati u bazi bilo kog tipa (preporuka:
 na nivou instance klase naslednice `AppConfig` (pogledati način čuvanja *plugin*-a u primeru sa istih vežbi). Takođe,
 dozvoljen i neki treći način uz prethodnu konsultaciju sa predmetnim asistentom.
 
-> **Pitanje**: Kako mozemo menjati broj polja u django modelu posto imamo cvor koja sadrzi listu elemenata koja nije
+> **Pitanje**: Kako mozemo menjati broj polja u `Django` modelu posto imamo cvor koja sadrzi listu elemenata koja nije
 > poznata na pocetku. <br/>
 **Odgovor**: `Django model` je `ORMaper` za relacionu baze, i kao takav izmena šeme baze ili tabela nije nužno
 > jednostavan proces. Morate unapred dobro izmodelovati vaše tabele, tako da mozete da pokrijete sve razlicite
@@ -203,7 +203,18 @@ rad sa više *workspace*-ova.
 > **Opciono**: Implentirati trajno čuvanje *workspace*-a kako bi se korisniku omogućilo da nastavi rad iz prethodne
 > sesije.
 
-#### 2.1.5. CLI
+#### 2.1.5 Uparivanje grafa (samo za petočlane timove)
+
+Platforma treba da omogući podršku za [savršeno uparivanje grafa](https://en.wikipedia.org/wiki/Perfect_matching). 
+Neophodno je implementirati sledeće pristupe:
+- [Algoritam maksimalnog uparavinja](https://sr.wikipedia.org/sr-el/%D0%90%D0%BB%D0%B3%D0%BE%D1%80%D0%B8%D1%82%D0%B0%D0%BC_%D0%BC%D0%B0%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D0%BB%D0%BD%D0%BE%D0%B3_%D1%83%D0%BF%D0%B0%D1%80%D0%B8%D0%B2%D0%B0%D1%9A%D0%B0) (Blossom): 
+  omogućava testiranje da li postoji savršeno uparivanje za dati graf kao i pronalaženje skupa grana koji čine savršen uparen graf.
+- Algebarski pristupi:
+  - [László Lovász algoritam](https://www.researchgate.net/publication/221150072_On_determinants_matchings_and_random_algorithms): omogućava testiranje da li postoji savršeno uparivanje za dati graf.
+  - [Mulmuley-Vazirani-Vazirani (MVV) algoritam](https://dl.acm.org/doi/10.1145/28395.383347): omogućava pronalaženje skupa grana koji čine savršeno uparen graf.
+  - Alegebarski pristupi se mogu paralelizovati i neophodno ih je imlementirati pomoću `numpy` biblioteke. 
+
+#### 2.1.6. CLI
 
 Platforma treba da omogući manipulaciju grafa koristeći *Command Line Interface* (CLI). Korisniku treba omogućiti otvaranje
 terminala na UI u kojem je moguće pomoću komandi raditi manipulaciju nad grafom. Terminal treba da bude svestan trenutnog grafa
@@ -216,6 +227,7 @@ podržati:
 - Kreiranje novih grana, menjanje i brisanje postojećih grana. Pod menjanjem se podrazumeva menjanje atributa grane.
 - Filtirranje i pretraga grafa.
 - Brisanje kompletnog grafa odnosnog platna za iscrtavanje.
+- Pronalaženje savršenog uparenog grafa (za petočlane timove).
 
 Primer komandi:
 
@@ -254,7 +266,7 @@ dokumenta, ali evo nekih primera:
 
 *Plugin* mora da obezbedit parsiranje i formiranje **cikilčnog grafa** (model grafa mora da podržava ciklične
 grafove). Određeni formati kao što je *RDF* podržavaju ciklične grafove i strukture, dok formati koji to ne podržavaju
-moraju se nadograditi tako da obezbede ciklične strukture. Nadogradnja tih formata bi se svodala na uvođenje dodatke
+moraju se nadograditi tako da obezbede ciklične strukture. Nadogradnja tih formata bi se svela na uvođenje dodatne
 semantike koja će omogućiti formiranje cikličnog grafa. Ispod se nalaze neki primeri ubacivanja semantike za formiranje 
 cikličnih struktura koje niste u obavezi da se pridržavate i imate na rasploganju da osmislite svoju semantiku.
 
@@ -333,12 +345,6 @@ za formiranje cirkularnog grafa.
 > **Napomena**: Na odbrani je neophodno demonstrirati rad sa acikličnim i cikličnim grafovima pa u skladu sa tim je
 > neophodno pripremiti odgovrajuće podatke.
 
-> **Napomena**: *RDF* se može reprezentovati u viže formata (*RDF-XML*, *Turtle*, itd.). U slučaju da ste se opredelili
-> za *RDF-XML* format, samim tim ste se opredelili za *XML* format kao izvor podataka i morate da pružite podršku za
-> parsiranje proizvoljnog *XML* fajla. U koliko ovo ne želite, morate koristiti neku drugu reprezentaciju *RDF-a* (npr.
-*Turtle*).
-
-
 > **Pitanje**: Da li je potrebno programski omogućiti izbor izvorišta podataka koji ima očekivani format zapisa (onakav
 > kako to plugin očekuje)? <br/>
 > **Odgovor**: Može, ali nije neophodno.
@@ -354,7 +360,7 @@ npr. `jinja2`).
 > **Napomena**: Sav statički sadržaj treba da se nalazi u platformi (*Django templates, CSS, JS*), kao i *Django views*.
 > Plugin može sadržati *jinja2 template*-e ukoliko se oni koriste za generisanje *string*-a.
 
-> **Pitanje**: Kako da *inplace*-ujemo string koji predstavlja *HTML* u *Django template* <br/>
+> **Pitanje**: Kako da *inplace*-ujemo string koji predstavlja *HTML* u *Django template*. <br/>
 > **Odgovor**: Pogledati [ovaj](https://stackoverflow.com/questions/17609822/insert-string-with-tags-in-django-template)
 > meterijal.
 
@@ -440,6 +446,14 @@ Kada korisnik poželi da pretraži ili filtrira čvorove grafa, to radi platform
 perzistirala (videti prethodni pasus). Rezultat ove operacije je podgraf koji se šalje *visualizer plugin*-u, koji
 ponovo gradi *HTML DOM* stablo. Ono biva vraćeno platformi i umetnutno u *template*.
 
+### 2.5. Developer Experience (DX)
+
+API plugin-ova treba da bude takav da omogući developeru laku implemntaciju i dobar **Developer Experience**.
+Posebno obratiti pažnju na API plugin-a za vizualizaciju.
+Plugin za vizualizaciju treba da omogući developeru da uz najmenju količinu truda (koda) može da konfiguriše 
+visualizaciju i ponašanje jednostavnih grafova, a da platforma ostalo uradi za njega. Takođe, neophodno je obezbediti 
+developeru potpunu kontrolu nad vizualizacijom i ponašanjem grafa i pregazi ponašanja definisano na platformi. API plugin-a za vizualizaciju mora da podrži oba pristupa.
+
 ## 3. Realizacija projekta
 
 ### 3.1. Raspodela posla
@@ -454,10 +468,11 @@ Timovi koji sadrže 5 članova neophodno je da:
 
  - implementiraju platformu,
  - implemntiraju 5 *plugin*-a, 2 *Visualizer plugin*-a i 3 *Data source plugin*-a,
- - implemntiraju aplikaciju u oba frejmvorka, `Django` i `Flask`.
+ - implemntiraju aplikaciju u oba frejmvorka, `Django` i `Flask`,
+ - implementiraju napomenute funkcionalnosti za petočlane timove.
  
-> **Napomena**: Nezavisno od broja članova u timu, rešenje mora da bude dezijanirano tako da ne zavisi od web
-> frejmvorka i da se može lako prebaciti na neki drugi frejmvorka. 
+> **Napomena**: Nezavisno od broja članova u timu, rešenje mora da bude dizajnirano tako da ne zavisi od web
+> frejmvorka i da se može lako prebaciti na neki drugi frejmvork. 
 
 > **Pitanje**: Da li je u redu da izvorišta podataka budu dva dokumenta istog tipa (npr. *JSON*), koji sadrže različite
 > podatke (npr. jedan sadrži informacije o avio-linijama, dok drugi sadrži informacije o društvenim mrežama). <br/>
@@ -484,7 +499,7 @@ Timovi koji sadrže 5 članova neophodno je da:
 > međusobno rad i teže zbog veće količine rada koji projekat nosi sa 5. članom. Šta raditi ukoliko neki od članova neće
 > da sarađuje? <br/>
 **Odgovor**: Što se izrade projekta tiče, ništa nije teže za petočlane timove. Core aplikacije ćete podeliti na 5
-> delova (manje posla po čoveku), a svaki od članova razvija po jedan plugin. Napomenuo bih da se ocena dobija
+> delova (manje posla po osobi), a svaki od članova razvija po jedan plugin. Napomenuo bih da se ocena dobija
 > pojedinačno. Ako neko od članova pak odbije saradnju, broj plugina će se smanjiti za jedan. Na kraju svako od
 > studenata treba da razvije tačno jedan plugin. Funkcionalnosti Core aplikacije se ne skaliraju (već dele na članove
 > koji “žele” da rade).
