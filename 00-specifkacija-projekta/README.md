@@ -435,7 +435,15 @@ Primer grafa:
 
 ![block-visualizer.png](.docs/block-visualizer.png)
 
-### 2.4. Komunikacija između platforme i plugin-ova
+### 2.4. Preglednost grafa
+
+Prikaz grafa mora da bude pregledan nezavisno od njegove veličine. Sabijeni, nefunkcionlni i neprekledni grafovi se neće
+tolerisati. S obzirom na to da treba da se obezbedi prikaz proizvodnog grafa možete koristiti bilo koju način za rešavanja
+ovog problema, ali bez narušavanja ostalih zahteva. Na primer, možete korisniku ponuditi opciju da definiše
+koliko će biti razmak između nodova, sila privlačenja itd. Preporuka je da istražite druge alate npr. graf baze kako oni
+rešavanju problem prikazivanje velikih grafova.
+
+### 2.5. Komunikacija između platforme i plugin-ova
 
 *Data source plugin* parsira izvorište podataka i na osnovu toga instancira klase modela kako bi napravio graf. Taj graf
 prosleđuje platformi koja ga negde interno sačuva (npr. `AppConfig`, baza, itd). Nakon toga, platforma šalje
@@ -446,7 +454,7 @@ Kada korisnik poželi da pretraži ili filtrira čvorove grafa, to radi platform
 perzistirala (videti prethodni pasus). Rezultat ove operacije je podgraf koji se šalje *visualizer plugin*-u, koji
 ponovo gradi *HTML DOM* stablo. Ono biva vraćeno platformi i umetnutno u *template*.
 
-### 2.5. Developer Experience (DX)
+### 2.6. Developer Experience (DX)
 
 API plugin-ova treba da bude takav da omogući developeru laku implemntaciju i dobar **Developer Experience**.
 Posebno obratiti pažnju na API plugin-a za vizualizaciju.
