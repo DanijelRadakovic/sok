@@ -637,15 +637,23 @@ Za kreiranje dijagrama možete koristiti `PlantUML` ili [draw.io](https://app.di
 
 ### 3.6. Kontrolna tacka
 
-Asistent će odabrati nekoliko timova koji treba da ukratko prezentuju (10-15 minuta) šta su do datog trenutka odradili.
+Kontrolna tačka nosi **15 negativnih bodova**. Ukoliko se uspešno odbrani kontrolna tačka tim ne dobija bodove. 
+U suprtnom se oduzimaju bodovi u skladu sa neispunjenim zahtevima koji su definisani za kontrolnu tačku.  
+
+Za kontrolnu tačku je neophodno implementirati sledeće funkcionalnosti: 
+- Generički model grafa koji podržava sve tipove grafova (povezan, nepovezan, cikličan, aciklična, usmeren, neusmeren).
+- Pretraga i filtriranje grafa. Napisati testove za pretragu i filtriranje grafa.
+- Prepoznavanje pluginova i uspotavjanje komunikacije sa pluginovima. Napisati testove za uspotavljanje komunikacije
+između pluginova. Za testiranje komunikacije napišite **Stub** test objekte za oba tipa plugin-a. 
+Testovi za prepoznavanje pluginova (iz okruženja) **nisu** obavezni da se napišu.
+
+Takođe, asistent će odabrati nekoliko timova koji treba da ukratko prezentuju (10-15 minuta) šta su do datog trenutka odradili.
 Prilikom prezentacije, osvrnuti se na sledeće:
 
 - Šta je odrađeno?
 - Zanimljivi problemi sa kojima ste se susreli?
 - Kakav je plan za dalje?
 - Nedoumice za nastavak izrade?
-
-Kontrolna tačka ne nosi bodove.
 
 ### 3.7. Odbrana projekta
 
