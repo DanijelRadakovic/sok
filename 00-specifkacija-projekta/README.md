@@ -643,9 +643,11 @@ U suprtnom se oduzimaju bodovi u skladu sa neispunjenim zahtevima koji su defini
 Za kontrolnu tačku je neophodno implementirati sledeće funkcionalnosti: 
 - Generički model grafa koji podržava sve tipove grafova (povezan, nepovezan, cikličan, aciklična, usmeren, neusmeren).
 - Pretraga i filtriranje grafa. Napisati testove za pretragu i filtriranje grafa.
-- Prepoznavanje pluginova i uspotavjanje komunikacije sa pluginovima. Napisati testove za uspotavljanje komunikacije
-između pluginova. Za testiranje komunikacije napišite **Stub** test objekte za oba tipa plugin-a. 
-Testovi za prepoznavanje pluginova (iz okruženja) **nisu** obavezni da se napišu.
+- Prepoznavanje plugin-ova i uspotavjanje komunikacije sa plugin-ovima. Napisati testove za uspotavljanje komunikacije
+između plugin-ova. Za testiranje komunikacije napišite **Stub** test objekte za oba tipa plugin-a. 
+Testovi za prepoznavanje plugin-ova (iz okruženja) **nisu** obavezni da se napišu.
+
+> **Napomena**: Od studenta se očekuje da zna da objasni napisan kod i arhitekturu sistema, u suprotnom dobija negativne bodove.
 
 Takođe, asistent će odabrati nekoliko timova koji treba da ukratko prezentuju (10-15 minuta) šta su do datog trenutka odradili.
 Prilikom prezentacije, osvrnuti se na sledeće:
